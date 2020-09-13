@@ -8,7 +8,6 @@ use App\FbEvent;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Validation\ValidationException;
 
 class FbAppEventController extends Controller
 {
@@ -20,7 +19,7 @@ class FbAppEventController extends Controller
     public function index()
     {
         $fbAppEvents = FbAppEvent::orderBy('id')
-            ->with(['fbApplication', 'fbEvent'])
+            ->with(['fbApp', 'fbEvent'])
             ->get();
 
         return response()->view('cabinet.app-events.index', compact('fbAppEvents'));
@@ -61,7 +60,7 @@ class FbAppEventController extends Controller
             $request->except([
                 '_token',
                 '_method',
-                'fb_application_id',
+                'fb_app_id',
                 'fb_event_id',
                 'value_to_sum'
             ])
@@ -100,9 +99,6 @@ class FbAppEventController extends Controller
             ->orderBy('id')
             ->get();
 
-        // TODO: json cast is not working
-        $fbAppEvent->parameters = json_decode($fbAppEvent->parameters);
-
         return response()->view('cabinet.app-events.edit', compact('fbApps', 'fbEvents', 'fbAppEvent'));
     }
 
@@ -118,15 +114,13 @@ class FbAppEventController extends Controller
         $request->validate(FbAppEvent::getRules());
 
         $fbAppEvent->fill($request->all());
-        $fbAppEvent->parameters = json_encode(
-            $request->except([
-                '_token',
-                '_method',
-                'fb_application_id',
-                'fb_event_id',
-                'value_to_sum'
-            ])
-        );
+        $fbAppEvent->parameters = $request->except([
+            '_token',
+            '_method',
+            'fb_app_id',
+            'fb_event_id',
+            'value_to_sum'
+        ]);
         $fbAppEvent->save();
 
         return redirect()->route('fb-app-events.index')->with(['success' => 'Fb application events was updated!']);

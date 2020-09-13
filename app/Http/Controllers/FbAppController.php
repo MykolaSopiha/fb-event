@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\FbApp;
-use App\FbEvent;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 
 class FbAppController extends Controller
 {
@@ -19,7 +17,7 @@ class FbAppController extends Controller
      */
     public function index()
     {
-        $fbApps = FbApp::orderBy('id')->with('events')->get();
+        $fbApps = FbApp::orderBy('id')->with('fbEvents')->get();
         return response()->view('cabinet.applications.index', compact('fbApps'));
     }
 

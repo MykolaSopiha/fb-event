@@ -17,9 +17,9 @@ class FbEvent extends Model
         ];
     }
 
-    public function applications()
+    public function fbApps()
     {
-        return $this->belongsToMany(FbApp::class, 'fb_application_event')
+        return $this->belongsToMany(FbApp::class, 'fb_app_event')
             ->withPivot('value_to_sum', 'parameters');
     }
 

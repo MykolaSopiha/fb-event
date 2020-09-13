@@ -2,6 +2,7 @@
 
 use App\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -13,14 +14,15 @@ class UserSeeder extends Seeder
     public function run()
     {
         do {
-            $apiKey = str_random(100);
+            $apiKey = Str::random();
         } while (User::where('api_key', $apiKey)->first() instanceof User);
 
         User::updateOrCreate([
             'name' => 'admin',
             'email' => 'admin@mail.com'
         ], [
-            'password' => bcrypt('123123')
+            'password' => bcrypt('123123'),
+            'api_key' => $apiKey
         ]);
     }
 }

@@ -27,7 +27,7 @@
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link @if (Route::is('fb-apps.*')) active @endif" href="{{ route('fb-apps.index') }}">
-                            Applications
+                            Apps
                         </a>
                     </li>
                     <li class="nav-item">

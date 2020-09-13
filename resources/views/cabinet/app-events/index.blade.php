@@ -26,7 +26,7 @@
                                 @foreach ($fbAppEvents as $fbAppEvent)
                                     <tr>
                                         <th scope="row">{{ $fbAppEvent->fbEvent->name }}</th>
-                                        <td>{{ $fbAppEvent->fbApplication->name }}</td>
+                                        <td>{{ $fbAppEvent->fbApp->name }}</td>
                                         <td class="text-center">{{ $fbAppEvent->value_to_sum ?? '-/-' }}</td>
                                         <td><code>{{ json_encode($fbAppEvent->parameters) }}</code></td>
                                         <td class="text-right" nowrap>

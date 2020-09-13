@@ -12,9 +12,9 @@ class FbApp extends Model
         'key'
     ];
 
-    public function events()
+    public function fbEvents()
     {
-        return $this->belongsToMany(FbEvent::class, 'fb_application_events')
+        return $this->belongsToMany(FbEvent::class, 'fb_app_events')
             ->withPivot('value_to_sum', 'parameters');
     }
 
@@ -26,7 +26,7 @@ class FbApp extends Model
         ];
     }
 
-    public function fbApplicationEvents()
+    public function fbAppEvents()
     {
         return $this->hasMany(FbAppEvent::class);
     }

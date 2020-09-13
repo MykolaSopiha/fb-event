@@ -35,14 +35,14 @@ class SendAppEvents implements ShouldQueue
     public function handle()
     {
         $fbApp = FbApp::where('key', $this->appKey)
-            ->with(['fbApplicationEvents', 'fbApplicationEvents.fbEvent'])
+            ->with(['fbAppEvents', 'fbAppEvents.fbEvent'])
             ->firstOrCreate();
 
         $client = new Client();
 
         $apiUrl = config('services.facebook.api_url') . '/' . $fbApp->fb_id . '/activities';
 
-        foreach ($fbApp->fbApplicationEvents as $applicationEvent) {
+        foreach ($fbApp->fbAppEvents as $appEvent) {
 
             $response = $client->post($apiUrl, [
                 'query' => [
@@ -52,10 +52,10 @@ class SendAppEvents implements ShouldQueue
                     'advertiser_tracking_enabled' => 1,
                     'application_tracking_enabled' => 1,
                     'custom_events' => array_merge(
-                        $applicationEvent->parameters,
+                        $appEvent->parameters,
                         [
-                            '_eventName' => $applicationEvent->fbEvent->name,
-                            '_valueToSum' => $applicationEvent->value_to_sum
+                            '_eventName' => $appEvent->fbEvent->name,
+                            '_valueToSum' => $appEvent->value_to_sum
                         ]
                     ),
                     // TODO: where can I take this param?

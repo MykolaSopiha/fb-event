@@ -2,13 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property string|null value_to_sum
  * @property mixed|null parameters
- * @property int fb_application_id
+ * @property int fb_app_id
  * @property int fb_event_id
  */
 class FbAppEvent extends Model
@@ -16,7 +15,7 @@ class FbAppEvent extends Model
     protected $fillable = [
         'value_to_sum',
         'parameters',
-        'fb_application_id',
+        'fb_app_id',
         'fb_event_id'
     ];
 
@@ -33,12 +32,12 @@ class FbAppEvent extends Model
     {
         return [
             'fb_event_id' => 'required|exists:fb_events,id',
-            'fb_application_id' => 'required|exists:fb_applications,id',
+            'fb_app_id' => 'required|exists:fb_apps,id',
             'valueToSum' => 'string|nullable',
         ];
     }
 
-    public function fbApplication()
+    public function fbApp()
     {
         return $this->belongsTo(FbApp::class);
     }

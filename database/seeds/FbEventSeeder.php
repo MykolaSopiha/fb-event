@@ -18,11 +18,12 @@ class FbEventSeeder extends Seeder
                 'name' => $eventName
             ]);
 
-            foreach ($parameters as $parameterName => $type) {
+            foreach ($parameters as $parameter) {
                 $fbEvent = FbEventParameter::updateOrCreate([
-                    'name' => $parameterName,
-                    'type' => $type,
-                    'fb_event_id' => $fbEvent->id
+                    'name' => $parameter['name'],
+                    'type' => $parameter['type'],
+                    'fb_event_id' => $fbEvent->id,
+                    'description' => $parameter['description'],
                 ]);
             }
         }
@@ -32,8 +33,16 @@ class FbEventSeeder extends Seeder
     {
         return [
             'fb_mobile_tutorial_completion' => [
-                'fb_success' => 'logical',
-                'fb_content_id' =>'string'
+                [
+                    'name' => 'fb_success',
+                    'type' => 'logical',
+                    'description' => '1 = "да", 0 = "нет"',
+                ],
+                [
+                    'name' => 'fb_content_id',
+                    'type' => 'string',
+                    'description' => 'Международный артикул (EAN), если применяется, или другой идентификатор товара или контента. Для разных ID продуктов: например, "[\"1234\",\"5678\"]"',
+                ]
             ]
         ];
     }

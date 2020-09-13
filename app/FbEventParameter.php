@@ -24,7 +24,7 @@ class FbEventParameter extends Model
         ];
     }
 
-    public function event()
+    public function fbEvent()
     {
         return $this->belongsTo(FbEvent::class);
     }

@@ -17,18 +17,18 @@
 
                             <div class="form-group">
                                 <label for="selectApplication">Application:</label>
-                                <select class="form-control @error('fb_application_id') is-invalid @enderror"
-                                        id="selectApplication" name="fb_application_id">
+                                <select class="form-control @error('fb_app_id') is-invalid @enderror"
+                                        id="selectApplication" name="fb_app_id">
                                     @foreach($fbApps as $fbApp)
                                         <option
                                             value="{{ $fbApp->id }}"
-                                            @if ($fbAppEvent->fb_application_id === $fbApp->id) selected @endif
+                                            @if ($fbAppEvent->fb_app_id === $fbApp->id) selected @endif
                                         >
                                             {{ $fbApp->name }}
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('fb_application_id')
+                                @error('fb_app_id')
                                 <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
