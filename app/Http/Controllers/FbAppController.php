@@ -41,9 +41,13 @@ class FbAppController extends Controller
     {
         $request->validate(FbApp::getRules());
 
+        do {
+            $appKey = Str::random(16);
+        } while (FbApp::where('key', $appKey)->first() instanceof FbApp);
+
         $fbApp = new FbApp();
         $fbApp->fill($request->all());
-        $fbApp->key = Str::random();
+        $fbApp->key = $appKey;
         $fbApp->save();
 
         return redirect()->route('fb-apps.index')->with(['success' => 'Application was created!']);

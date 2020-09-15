@@ -18,6 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => 'public_api', 'namespace' => 'Api'], function () {
+Route::group(['namespace' => 'Api'], function () {
     Route::get('send-events', ['uses' => 'EventController@send', 'as' => 'send']);
 });

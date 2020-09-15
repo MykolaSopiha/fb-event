@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateFbAppsTable extends Migration
@@ -20,6 +21,8 @@ class CreateFbAppsTable extends Migration
             $table->string('key')->unique();
             $table->timestamps();
         });
+
+        DB::query('CREATE INDEX fb_apps_key_hash_index ON fb_apps USING hash (key);');
     }
 
     /**
@@ -29,6 +32,8 @@ class CreateFbAppsTable extends Migration
      */
     public function down()
     {
+        DB::query('drop index fb_apps_key_hash_index;');
+
         Schema::dropIfExists('fb_apps');
     }
 }
