@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +23,6 @@ Route::resources([
     'fb-apps' => 'FbAppController',
     'fb-app-events' => 'FbAppEventController',
 ]);
+
+Route::get('fb-apps/{fb_app}/logs', 'FbAppController@logs')->name('fb-apps.logs');
+Route::get('fb-app-events/{fb_app_event}/logs', 'FbAppEventController@logs')->name('fb-app-events.logs');

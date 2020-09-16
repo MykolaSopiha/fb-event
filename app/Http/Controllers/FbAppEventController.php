@@ -138,4 +138,18 @@ class FbAppEventController extends Controller
 
         return redirect()->route('fb-app-events.index')->with(['success' => 'Fb application events was deleted!']);
     }
+
+    /**
+     * @param FbAppEvent $fbAppEvent
+     * @return Response
+     */
+    public function logs(FbAppEvent $fbAppEvent)
+    {
+        $logs = $fbAppEvent->fbAppEventLogs()
+            ->orderBy('id')
+            ->limit(100)
+            ->get();
+
+        return response()->view('cabinet.app-events.logs', compact('logs'));
+    }
 }

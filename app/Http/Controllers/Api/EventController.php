@@ -16,5 +16,7 @@ class EventController extends Controller
         $request->validate(['app_key' => 'required|string']);
 
         SendAppEvents::dispatch($request->input('app_key'));
+
+        return response()->json(['success' => true ]);
     }
 }

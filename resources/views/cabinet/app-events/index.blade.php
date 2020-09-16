@@ -28,8 +28,16 @@
                                         <th scope="row">{{ $fbAppEvent->fbEvent->name }}</th>
                                         <td>{{ $fbAppEvent->fbApp->name }}</td>
                                         <td class="text-center">{{ $fbAppEvent->value_to_sum ?? '-/-' }}</td>
-                                        <td><code>{{ json_encode($fbAppEvent->parameters) }}</code></td>
+                                        <td>
+                                            <code>
+                                                {{ stripslashes(json_encode($fbAppEvent->parameters)) }}
+                                            </code>
+                                        </td>
                                         <td class="text-right" nowrap>
+                                            <a href="{{ route('fb-app-events.logs', $fbAppEvent->id) }}"
+                                               class="btn btn-sm btn-outline-info">
+                                                logs
+                                            </a>
                                             <a href="{{ route('fb-app-events.edit', $fbAppEvent->id) }}"
                                                class="btn btn-sm btn-outline-primary">
                                                 edit

@@ -104,4 +104,18 @@ class FbAppController extends Controller
         FbApp::destroy($id);
         return redirect()->route('fb-apps.index')->with(['success' => "Application was deleted!"]);
     }
+
+    /**
+     * @param FbApp $fbApp
+     * @return Response
+     */
+    public function logs(FbApp $fbApp)
+    {
+        $logs = $fbApp->fbAppEventLogs()
+            ->orderBy('id')
+            ->limit(100)
+            ->get();
+
+        return response()->view('cabinet.applications.logs', compact('logs'));
+    }
 }

@@ -46,4 +46,9 @@ class FbAppEvent extends Model
     {
         return $this->belongsTo(FbEvent::class);
     }
+
+    public function fbAppEventLogs()
+    {
+        return $this->hasMany(FbAppEventLog::class);
+    }
 }
