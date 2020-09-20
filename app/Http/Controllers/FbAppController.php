@@ -17,7 +17,7 @@ class FbAppController extends Controller
      */
     public function index()
     {
-        $fbApps = FbApp::orderBy('id')->with('fbEvents')->get();
+        $fbApps = FbApp::with('fbEvents')->orderBy('id')->get();
         return response()->view('cabinet.applications.index', compact('fbApps'));
     }
 

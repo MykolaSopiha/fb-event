@@ -7,8 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class FbApp
+ *
  * @package App
  * @mixin Eloquent
+ * @property string name
+ * @property number fb_id
+ * @property string key
  */
 class FbApp extends Model
 {
