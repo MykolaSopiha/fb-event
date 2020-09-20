@@ -17,17 +17,19 @@ class SendAppEvents implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $appKey;
+    protected string $appKey;
+    protected string $advertiserId;
 
     /**
      * Create a new job instance.
      *
      * @param string $appKey
-     * @return void
+     * @param string $advertiserId
      */
-    public function __construct(string $appKey)
+    public function __construct(string $appKey, string $advertiserId)
     {
         $this->appKey = $appKey;
+        $this->advertiserId = $advertiserId;
     }
 
     /**
@@ -60,8 +62,7 @@ class SendAppEvents implements ShouldQueue
                             '_valueToSum' => $appEvent->value_to_sum
                         ]
                     ),
-                    // TODO: where can I take this param?
-                    'advertiser_id' => '1111-1111-1111-1111'
+                    'advertiser_id' => $this->advertiserId
                 ]
             ];
 

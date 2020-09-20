@@ -2,8 +2,14 @@
 
 namespace App;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class FbApp
+ * @package App
+ * @mixin Eloquent
+ */
 class FbApp extends Model
 {
     protected $fillable = [
