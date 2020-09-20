@@ -12,47 +12,49 @@
                 <div class="card">
                     <div class="card-body">
                         @if (count($fbAppEvents))
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Type</th>
-                                    <th scope="col">Application</th>
-                                    <th scope="col">valueToSum</th>
-                                    <th scope="col">Parameters</th>
-                                    <th scope="col"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach ($fbAppEvents as $fbAppEvent)
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
                                     <tr>
-                                        <th scope="row">{{ $fbAppEvent->fbEvent->name }}</th>
-                                        <td>{{ $fbAppEvent->fbApp->name }}</td>
-                                        <td class="text-center">{{ $fbAppEvent->value_to_sum ?? '-/-' }}</td>
-                                        <td>
-                                            <code>
-                                                {{ stripslashes(json_encode($fbAppEvent->parameters)) }}
-                                            </code>
-                                        </td>
-                                        <td class="text-right" nowrap>
-                                            <a href="{{ route('fb-app-events.logs', $fbAppEvent->id) }}"
-                                               class="btn btn-sm btn-outline-info">
-                                                logs
-                                            </a>
-                                            <a href="{{ route('fb-app-events.edit', $fbAppEvent->id) }}"
-                                               class="btn btn-sm btn-outline-primary">
-                                                edit
-                                            </a>
-                                            <form class="d-inline" action="{{ route('fb-app-events.destroy', $fbAppEvent->id) }}"
-                                                  method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-sm btn-outline-danger">delete</button>
-                                            </form>
-                                        </td>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Application</th>
+                                        <th scope="col">valueToSum</th>
+                                        <th scope="col">Parameters</th>
+                                        <th scope="col"></th>
                                     </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    @foreach ($fbAppEvents as $fbAppEvent)
+                                        <tr>
+                                            <th scope="row">{{ $fbAppEvent->fbEvent->name }}</th>
+                                            <td>{{ $fbAppEvent->fbApp->name }}</td>
+                                            <td class="text-center">{{ $fbAppEvent->value_to_sum ?? '-/-' }}</td>
+                                            <td>
+                                                <code>
+                                                    {{ stripslashes(json_encode($fbAppEvent->parameters)) }}
+                                                </code>
+                                            </td>
+                                            <td class="text-right" nowrap>
+                                                <a href="{{ route('fb-app-events.logs', $fbAppEvent->id) }}"
+                                                   class="btn btn-sm btn-outline-info">
+                                                    logs
+                                                </a>
+                                                <a href="{{ route('fb-app-events.edit', $fbAppEvent->id) }}"
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    edit
+                                                </a>
+                                                <form class="d-inline" action="{{ route('fb-app-events.destroy', $fbAppEvent->id) }}"
+                                                      method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-sm btn-outline-danger">delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         @else
                             Facebook applications are missing...
                         @endif

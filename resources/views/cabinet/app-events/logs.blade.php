@@ -12,28 +12,30 @@
                 <div class="card">
                     <div class="card-body">
                         @if (count($logs))
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Desc</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Content</th>
-                                    <th scope="col">Response</th>
-                                    <th scope="col">Date</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach ($logs as $log)
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
                                     <tr>
-                                        <th scope="row">{{ $log->desc }}</th>
-                                        <td>{{ $log->status }}</td>
-                                        <td>@json($log->json_content)</td>
-                                        <td>@json($log->json_response)</td>
-                                        <td>{{ $log->created_at }}</td>
+                                        <th scope="col">Desc</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Content</th>
+                                        <th scope="col">Response</th>
+                                        <th scope="col">Date</th>
                                     </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    @foreach ($logs as $log)
+                                        <tr>
+                                            <th scope="row">{{ $log->desc }}</th>
+                                            <td>{{ $log->status }}</td>
+                                            <td>@json($log->json_content)</td>
+                                            <td>@json($log->json_response)</td>
+                                            <td>{{ $log->created_at }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         @else
                             Log are empty...
                         @endif
