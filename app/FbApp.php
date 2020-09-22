@@ -4,6 +4,7 @@ namespace App;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 /**
  * Class FbApp
@@ -16,6 +17,21 @@ use Illuminate\Database\Eloquent\Model;
  */
 class FbApp extends Model
 {
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            /** @var FbApp $model */
+
+            do {
+                $appKey = Str::random();
+            } while (FbApp::where('key', $appKey)->first() instanceof FbApp);
+
+            $model->key = $appKey;
+        });
+    }
+
     protected $fillable = [
         'name',
         'fb_id',

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\FbApp;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Str;
 
 class FbAppController extends Controller
 {
@@ -40,15 +40,7 @@ class FbAppController extends Controller
     public function store(Request $request)
     {
         $request->validate(FbApp::getRules());
-
-        do {
-            $appKey = Str::random(16);
-        } while (FbApp::where('key', $appKey)->first() instanceof FbApp);
-
-        $fbApp = new FbApp();
-        $fbApp->fill($request->all());
-        $fbApp->key = $appKey;
-        $fbApp->save();
+        FbApp::create($request->validated());
 
         return redirect()->route('fb-apps.index')->with(['success' => 'Application was created!']);
     }
@@ -67,12 +59,11 @@ class FbAppController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $fbAppId
+     * @param FbApp $fbApp
      * @return Response
      */
-    public function edit(int $fbAppId)
+    public function edit(FbApp $fbApp)
     {
-        $fbApp = FbApp::findOrFail($fbAppId);
         return response()->view('cabinet.applications.edit', compact('fbApp'));
     }
 
@@ -80,15 +71,13 @@ class FbAppController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param int $fbAppId
+     * @param FbApp $fbApp
      * @return RedirectResponse
      */
-    public function update(Request $request, int $fbAppId)
+    public function update(Request $request, FbApp $fbApp)
     {
         $request->validate(FbApp::getRules());
-
-        $fbApp = FbApp::findOrFail($fbAppId);
-        $fbApp->update($request->all());
+        $fbApp->update($request->validated());
 
         return redirect()->route('fb-apps.index')->with(['success' => "Application was updated!"]);
     }
@@ -96,12 +85,17 @@ class FbAppController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param FbApp $fbApp
      * @return RedirectResponse
      */
-    public function destroy(int $id)
+    public function destroy(FbApp $fbApp)
     {
-        FbApp::destroy($id);
+        try {
+            $fbApp->delete();
+        } catch (Exception $e) {
+            return redirect()->route('fb-apps.index')->with(['error' => "Application was not deleted!"]);
+        }
+
         return redirect()->route('fb-apps.index')->with(['success' => "Application was deleted!"]);
     }
 
@@ -111,10 +105,7 @@ class FbAppController extends Controller
      */
     public function logs(FbApp $fbApp)
     {
-        $logs = $fbApp->fbAppEventLogs()
-            ->orderBy('id')
-            ->limit(100)
-            ->get();
+        $logs = $fbApp->fbAppEventLogs()->latest(100);
 
         return response()->view('cabinet.applications.logs', compact('logs'));
     }

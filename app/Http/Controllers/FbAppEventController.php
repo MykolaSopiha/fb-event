@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\FbApp;
 use App\FbAppEvent;
 use App\FbEvent;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -18,8 +19,8 @@ class FbAppEventController extends Controller
      */
     public function index()
     {
-        $fbAppEvents = FbAppEvent::orderBy('id')
-            ->with(['fbApp', 'fbEvent'])
+        $fbAppEvents = FbAppEvent::with(['fbApp', 'fbEvent'])
+            ->orderBy('id')
             ->get();
 
         return response()->view('cabinet.app-events.index', compact('fbAppEvents'));
@@ -53,7 +54,7 @@ class FbAppEventController extends Controller
         $request->validate(FbAppEvent::getRules());
 
         $fbAppEvent = new FbAppEvent();
-        $fbAppEvent->fill($request->all());
+        $fbAppEvent->fill($request->validated());
 
         // TODO: json cast is not working
         $fbAppEvent->parameters = json_encode(
@@ -74,10 +75,10 @@ class FbAppEventController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param FbAppEvent $fbAppEvent
      * @return void
      */
-    public function show(int $id)
+    public function show(FbAppEvent $fbAppEvent)
     {
         //
     }
@@ -85,13 +86,11 @@ class FbAppEventController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
+     * @param FbAppEvent $fbAppEvent
      * @return Response
      */
-    public function edit(int $id)
+    public function edit(FbAppEvent $fbAppEvent)
     {
-        $fbAppEvent = FbAppEvent::findOrFail($id);
-
         $fbApps = FbApp::orderBy('id')
             ->get();
 
@@ -113,7 +112,7 @@ class FbAppEventController extends Controller
     {
         $request->validate(FbAppEvent::getRules());
 
-        $fbAppEvent->fill($request->all());
+        $fbAppEvent->fill($request->validated());
         $fbAppEvent->parameters = $request->except([
             '_token',
             '_method',
@@ -129,14 +128,21 @@ class FbAppEventController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param FbAppEvent $fbAppEvent
      * @return RedirectResponse
+     * @throws Exception
      */
-    public function destroy(int $id)
+    public function destroy(FbAppEvent $fbAppEvent)
     {
-        FbAppEvent::destroy($id);
+        try {
+            $fbAppEvent->delete();
+        } catch (Exception $e) {
+            return redirect()->route('fb-app-events.index')
+                ->with(['error' => 'Fb application events was not deleted!']);
+        }
 
-        return redirect()->route('fb-app-events.index')->with(['success' => 'Fb application events was deleted!']);
+        return redirect()->route('fb-app-events.index')
+            ->with(['success' => 'Fb application events was deleted!']);
     }
 
     /**
@@ -145,10 +151,7 @@ class FbAppEventController extends Controller
      */
     public function logs(FbAppEvent $fbAppEvent)
     {
-        $logs = $fbAppEvent->fbAppEventLogs()
-            ->orderBy('id')
-            ->limit(100)
-            ->get();
+        $logs = $fbAppEvent->fbAppEventLogs()->latest(100);
 
         return response()->view('cabinet.app-events.logs', compact('logs'));
     }
