@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\FbApp;
+use App\Http\Requests\FbApp\StoreFbApp;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class FbAppController extends Controller
 {
@@ -34,13 +35,14 @@ class FbAppController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param StoreFbApp $request
      * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreFbApp $request)
     {
-        $request->validate(FbApp::getRules());
-        FbApp::create($request->validated());
+        $fbApp = new FbApp();
+        $fbApp->fill($request->validated());
+        Auth::user()->fbApps()->save($fbApp);
 
         return redirect()->route('fb-apps.index')->with(['success' => 'Application was created!']);
     }
@@ -70,14 +72,13 @@ class FbAppController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param StoreFbApp $request
      * @param FbApp $fbApp
      * @return RedirectResponse
      */
-    public function update(Request $request, FbApp $fbApp)
+    public function update(StoreFbApp $request, FbApp $fbApp)
     {
-        $request->validate(FbApp::getRules());
-        $fbApp->update($request->validated());
+        Auth::user()->fbApps()->findOrFail($fbApp->id)->update($request->validated());
 
         return redirect()->route('fb-apps.index')->with(['success' => "Application was updated!"]);
     }
@@ -105,7 +106,7 @@ class FbAppController extends Controller
      */
     public function logs(FbApp $fbApp)
     {
-        $logs = $fbApp->fbAppEventLogs()->latest(100);
+        $logs = $fbApp->fbAppEventLogs()->latest()->limit(100)->get();
 
         return response()->view('cabinet.applications.logs', compact('logs'));
     }

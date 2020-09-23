@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="alert alert-info" role="alert">
-            <b>Send app events to Facebook:</b> {{ rawurldecode(route('api.sendEvents', ['app_key' => '{app_key}'])) }}
+            <b>Send app events to Facebook:</b> {{ rawurldecode(route('api.apps.sendEvents', ['app_key' => '{app_key}', 'advertiser_id' => '{advertiser_id}'])) }}
         </div>
         <div class="row justify-content-center mb-4">
             <div class="col-md-12 text-right">

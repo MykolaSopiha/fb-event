@@ -44,12 +44,18 @@ class FbApp extends Model
             ->withPivot('value_to_sum', 'parameters');
     }
 
-    public static function getRules()
+    public static function getRules($mode = 'save')
     {
-        return [
+        $rules = [
             'name' => 'required|string',
             'fb_id' => 'required|numeric',
         ];
+
+        if ($mode === 'update') {
+            $rules['user_id'] = 'required|exists:users,id';
+        }
+
+        return $rules;
     }
 
     public function fbAppEvents()

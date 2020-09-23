@@ -17,9 +17,16 @@ class CreateFbAppsTable extends Migration
         Schema::create('fb_apps', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('fb_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('name');
             $table->string('key')->unique();
             $table->timestamps();
+
+            $table->foreign('user_id')
+                ->on('users')
+                ->references('id')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
 
         DB::query('CREATE INDEX fb_apps_key_hash_index ON fb_apps USING hash (key);');
