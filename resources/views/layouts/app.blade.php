@@ -23,7 +23,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="#">{{ config('app.name') }}</a>
+                <a class="navbar-brand" href="/">{{ config('app.name') }}</a>
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link @if (Route::is('fb-apps.*')) active @endif" href="{{ route('fb-apps.index') }}">
